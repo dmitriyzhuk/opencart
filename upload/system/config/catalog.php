@@ -1,19 +1,19 @@
 <?php
 // Site
-$_['site_url']         = HTTP_SERVER;
-$_['site_ssl']         = HTTPS_SERVER;
+$_['site_url']          = HTTP_SERVER;
+$_['site_ssl']          = HTTPS_SERVER;
 
 // Url
-$_['url_autostart']    = false;
+$_['url_autostart']     = false;
 
 // Database
-$_['db_autostart']     = true;
-$_['db_engine']        = DB_DRIVER; // mpdo, mssql, mysql, mysqli or postgre
-$_['db_hostname']      = DB_HOSTNAME;
-$_['db_username']      = DB_USERNAME;
-$_['db_password']      = DB_PASSWORD;
-$_['db_database']      = DB_DATABASE;
-$_['db_port']          = DB_PORT;
+$_['db_autostart']      = true;
+$_['db_engine']         = DB_DRIVER; // mpdo, mssql, mysql, mysqli or postgre
+$_['db_hostname']       = DB_HOSTNAME;
+$_['db_username']       = DB_USERNAME;
+$_['db_password']       = DB_PASSWORD;
+$_['db_database']       = DB_DATABASE;
+$_['db_port']           = DB_PORT;
 
 // Session
 $_['session_autostart'] = false;
@@ -48,67 +48,64 @@ $_['action_event'] = array(
 	),
 	'model/account/customer/addCustomer/after' => array(
 		// E-Mail
-		'mail/account_register',
+		'mail/register',
+		'mail/register/alert',
 		// Activity
-		'event/customer_activity/addCustomer'
-	),	
+		'event/activity/addCustomer'
+	),
 	'model/account/customer/editCustomer/after' => array(
-		'event/customer_activity/editCustomer',
+		'event/activity/editCustomer'
 	),	
 	'model/account/customer/editPassword/after' => array(
-		'event/customer_activity/editPassword',
+		'event/activity/editPassword'
 	),
 	'model/account/customer/editCode/after' => array(
 		// E-Mail
-		'mail/account_forgotten',
+		'mail/forgotten',
 		// Activity
-		'event/customer_activity/forgotten',
+		'event/activity/forgotten'
 	),		
+	'model/account/customer/addTransaction/after' => array(
+		'event/activity/addTransaction',
+		'mail/transaction'
+	),
 	'model/account/customer/deleteLoginAttempts/after' => array(
-		'event/customer_activity/login',
+		'event/activity/login'
 	),		
 	'model/account/address/addAddress/after' => array(
-		'event/customer_activity/addAddress',
+		'event/activity/addAddress'
 	),
 	'model/account/address/editAddress/after' => array(
-		'event/customer_activity/editAddress',
+		'event/activity/editAddress'
 	),	
 	'model/account/address/deleteAddress/after' => array(
-		'event/customer_activity/deleteAddress',
+		'event/activity/deleteAddress'
 	),	
+	// We want to do a before to grab the last order status
 	'model/checkout/order/addOrderHistory/before' => array(
-		'mail/order_history/before',
-	),		
+		// E-Mail
+		'mail/order/before'
+	),
 	'model/checkout/order/addOrderHistory/after' => array(
 		// E-Mail
-		'mail/order_history/after',
+		'mail/order/after',
+		'mail/order/alert',
 		// Activity
-		'event/customer_activity/addOrderHistory',
+		'event/activity/addOrderHistory'
 	),
 	'model/account/return/addReturn/after' => array(
-		'event/customer_activity/addReturn',
+		'event/activity/addReturn'
 	),	
-	'model/affiliate/affiliate/addAffiliate/after' => array(
+	'model/account/customer/addAffiliate/after' => array(
 		// E-Mail
-		'mail/affiliate_register',
+		'mail/affiliate',
+		'mail/affiliate/alert',
 		// Activity
-		'event/affiliate_activity/addAffiliate',
+		//'event/activity/addAffiliate'
 	),	
-	'model/affiliate/affiliate/editAffiliate/after' => array(
-		'event/affiliate_activity/editAffiliate',
-	),	
-	'model/affiliate/affiliate/editPassword/after' => array(
-		'event/affiliate_activity/editPassword',
-	),
-	'model/affiliate/affiliate/editPayment/after' => array(
-		'event/affiliate_activity/editPayment',
+	'model/account/customer/editAffiliate/after' => array(
+		'event/activity/editAffiliate'
 	),			
-	'model/affiliate/affiliate/editCode/after' => array(
-		'event/affiliate_activity/forgotten',
-	),	
-	'model/affiliate/affiliate/deleteLoginAttempts/after' => array(
-		'event/affiliate_activity/login',
-	),						
 	//'controller/*/before' => array(
 	//	'event/debug/before'
 	//),

@@ -428,7 +428,6 @@ class ControllerSaleOrder extends Controller {
 		$data['entry_lastname'] = $this->language->get('entry_lastname');
 		$data['entry_email'] = $this->language->get('entry_email');
 		$data['entry_telephone'] = $this->language->get('entry_telephone');
-		$data['entry_fax'] = $this->language->get('entry_fax');
 		$data['entry_comment'] = $this->language->get('entry_comment');
 		$data['entry_affiliate'] = $this->language->get('entry_affiliate');
 		$data['entry_address'] = $this->language->get('entry_address');
@@ -559,7 +558,6 @@ class ControllerSaleOrder extends Controller {
 			$data['lastname'] = $order_info['lastname'];
 			$data['email'] = $order_info['email'];
 			$data['telephone'] = $order_info['telephone'];
-			$data['fax'] = $order_info['fax'];
 			$data['account_custom_field'] = $order_info['custom_field'];
 
 			$this->load->model('customer/customer');
@@ -648,7 +646,6 @@ class ControllerSaleOrder extends Controller {
 			$data['lastname'] = '';
 			$data['email'] = '';
 			$data['telephone'] = '';
-			$data['fax'] = '';
 			$data['customer_custom_field'] = array();
 
 			$data['addresses'] = array();
@@ -1117,16 +1114,16 @@ class ControllerSaleOrder extends Controller {
 			$data['affiliate_lastname'] = $order_info['affiliate_lastname'];
 
 			if ($order_info['affiliate_id']) {
-				$data['affiliate'] = $this->url->link('marketing/affiliate/edit', 'user_token=' . $this->session->data['user_token'] . '&affiliate_id=' . $order_info['affiliate_id'], true);
+				$data['affiliate'] = $this->url->link('customer/customer/edit', 'user_token=' . $this->session->data['user_token'] . '&customer_id=' . $order_info['affiliate_id'], true);
 			} else {
 				$data['affiliate'] = '';
 			}
 
 			$data['commission'] = $this->currency->format($order_info['commission'], $order_info['currency_code'], $order_info['currency_value']);
 
-			$this->load->model('marketing/affiliate');
+			$this->load->model('customer/customer');
 
-			$data['commission_total'] = $this->model_marketing_affiliate->getTotalTransactionsByOrderId($this->request->get['order_id']);
+			$data['commission_total'] = $this->model_customer_customer->getTotalTransactionsByOrderId($this->request->get['order_id']);
 
 			$this->load->model('localisation/order_status');
 
@@ -1504,9 +1501,9 @@ class ControllerSaleOrder extends Controller {
 			$order_info = $this->model_sale_order->getOrder($order_id);
 
 			if ($order_info) {
-				$this->load->model('marketing/affiliate');
+				$this->load->model('customer/customer');
 
-				$affiliate_total = $this->model_marketing_affiliate->getTotalTransactionsByOrderId($order_id);
+				$affiliate_total = $this->model_customer_customer->getTotalTransactionsByOrderId($order_id);
 
 				if (!$affiliate_total) {
 					$this->model_marketing_affiliate->addTransaction($order_info['affiliate_id'], $this->language->get('text_order_id') . ' #' . $order_id, $order_info['commission'], $order_id);
@@ -1539,9 +1536,9 @@ class ControllerSaleOrder extends Controller {
 			$order_info = $this->model_sale_order->getOrder($order_id);
 
 			if ($order_info) {
-				$this->load->model('marketing/affiliate');
+				$this->load->model('customer/customer');
 
-				$this->model_marketing_affiliate->deleteTransaction($order_id);
+				$this->model_customer_customer->deleteTransactionByOrderId($order_id);
 			}
 
 			$json['success'] = $this->language->get('text_commission_removed');
@@ -1618,7 +1615,6 @@ class ControllerSaleOrder extends Controller {
 		$data['text_invoice_date'] = $this->language->get('text_invoice_date');
 		$data['text_date_added'] = $this->language->get('text_date_added');
 		$data['text_telephone'] = $this->language->get('text_telephone');
-		$data['text_fax'] = $this->language->get('text_fax');
 		$data['text_email'] = $this->language->get('text_email');
 		$data['text_website'] = $this->language->get('text_website');
 		$data['text_payment_address'] = $this->language->get('text_payment_address');
@@ -1657,12 +1653,10 @@ class ControllerSaleOrder extends Controller {
 					$store_address = $store_info['config_address'];
 					$store_email = $store_info['config_email'];
 					$store_telephone = $store_info['config_telephone'];
-					$store_fax = $store_info['config_fax'];
 				} else {
 					$store_address = $this->config->get('config_address');
 					$store_email = $this->config->get('config_email');
 					$store_telephone = $this->config->get('config_telephone');
-					$store_fax = $this->config->get('config_fax');
 				}
 
 				if ($order_info['invoice_no']) {
@@ -1810,7 +1804,6 @@ class ControllerSaleOrder extends Controller {
 					'store_address'    => nl2br($store_address),
 					'store_email'      => $store_email,
 					'store_telephone'  => $store_telephone,
-					'store_fax'        => $store_fax,
 					'email'            => $order_info['email'],
 					'telephone'        => $order_info['telephone'],
 					'shipping_address' => $shipping_address,
@@ -1850,7 +1843,6 @@ class ControllerSaleOrder extends Controller {
 		$data['text_invoice_date'] = $this->language->get('text_invoice_date');
 		$data['text_date_added'] = $this->language->get('text_date_added');
 		$data['text_telephone'] = $this->language->get('text_telephone');
-		$data['text_fax'] = $this->language->get('text_fax');
 		$data['text_email'] = $this->language->get('text_email');
 		$data['text_website'] = $this->language->get('text_website');
 		$data['text_contact'] = $this->language->get('text_contact');
@@ -1898,12 +1890,10 @@ class ControllerSaleOrder extends Controller {
 					$store_address = $store_info['config_address'];
 					$store_email = $store_info['config_email'];
 					$store_telephone = $store_info['config_telephone'];
-					$store_fax = $store_info['config_fax'];
 				} else {
 					$store_address = $this->config->get('config_address');
 					$store_email = $this->config->get('config_email');
 					$store_telephone = $this->config->get('config_telephone');
-					$store_fax = $this->config->get('config_fax');
 				}
 
 				if ($order_info['invoice_no']) {
@@ -2017,7 +2007,6 @@ class ControllerSaleOrder extends Controller {
 					'store_address'    => nl2br($store_address),
 					'store_email'      => $store_email,
 					'store_telephone'  => $store_telephone,
-					'store_fax'        => $store_fax,
 					'email'            => $order_info['email'],
 					'telephone'        => $order_info['telephone'],
 					'shipping_address' => $shipping_address,
