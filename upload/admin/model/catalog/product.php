@@ -573,7 +573,7 @@ class ModelCatalogProduct extends Model {
 			$sql .= " AND p.model LIKE '" . $this->db->escape((string)$data['filter_model']) . "%'";
 		}
 
-		if (isset($data['filter_price']) && !is_null($data['filter_price'])) {
+		if (!empty($data['filter_price'])) {
 			$sql .= " AND p.price LIKE '" . $this->db->escape((string)$data['filter_price']) . "%'";
 		}
 
